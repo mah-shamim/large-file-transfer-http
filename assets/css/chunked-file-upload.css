@@ -1,0 +1,31 @@
+body {
+    background-color: #f8f9fa;
+}
+.card {
+    margin-bottom: 20px;
+}
+#progress-bar {
+    height: 30px;
+}
+#file-list {
+    margin-top: 20px;
+}
+.upload-item {
+    margin-bottom: 10px;
+}
+.upload-item .progress {
+    height: 20px;
+}
+
+#progress { width: 100%; background: #f3f3f3; }
+#progress-bar { width: 0; height: 30px; background: #4caf50; }
+#drop-area {
+    border: 2px dashed #007bff;
+    border-radius: 5px;
+    padding: 20px;
+    text-align: center;
+    margin-bottom: 20px;
+    transition: border-color 0.3s;
+}
+#drop-area.highlight { border-color: #f5c518; }
+.file-status { margin-top: 10px; }
