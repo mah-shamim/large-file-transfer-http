@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Upload Dashboard</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./assets/css/chunked-file-upload.css">
+</head>
+<body class="container mt-4">
+<h1 class="text-center">File Upload Dashboard</h1>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Chunked Uploads</h5>
+            </div>
+            <div class="card-body">
+                <div id="drop-area">
+                    <p>Drag and drop files here or click to select</p>
+                    <input type="file" id="fileInput" multiple class="form-control mb-2"/>
+                </div>
+                <div id="progress-bar"></div>
+                <button id="uploadBtn" class="btn btn-primary">Upload Files</button>
+                <div id="file-list"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Downloads</h5>
+            </div>
+            <div class="card-body">
+                <button id="downloadBtn" class="btn btn-success">Download Files</button>
+                <div id="download-list" class="mt-2"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="./assets/js/chunked-file-upload.js"></script>
+</body>
+</html>
