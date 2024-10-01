@@ -83,25 +83,6 @@ $('#uploadBtn').on('click', function() {
                     currentChunk++;
                     $('#progress-bar').css('width', ((currentChunk / totalChunks) * 100) + '%');
                     $('#status-' + file.name.replaceAll(' ', '-')).html('Uploaded chunk ' + (currentChunk) + ' of ' + totalChunks); // Update status
-                    console.log('#status-' + file.name.replaceAll(' ', '-'))
-                    console.log((currentChunk / totalChunks) * 100)
-// Ensure response is an array
-                    /*if (Array.isArray(response)) {
-                        response.forEach((item) => {
-                            const listItem = $(`
-                        <div class="upload-item">
-                            <div>${item.file} (${(item.size / 1024).toFixed(2)} KB) - ${item.status}</div>
-                            <div class="progress">
-                                <div class="progress-bar" role="progressbar" style="width: 100%"></div>
-                            </div>
-                        </div>
-                    `);
-                            $('#file-list').append(listItem);
-                        });
-                    } else {
-                        // Improved error handling for unexpected response format
-                        alert(`Unexpected response format: ${JSON.stringify(response)}`);
-                    }*/
                     if (currentChunk < totalChunks) {
                         uploadChunk(); // Upload next chunk
                     } else {
