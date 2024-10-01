@@ -2,7 +2,7 @@
 A PHP-based solution for efficiently transferring large files over the HTTP protocol. This project implements various techniques to optimize file uploads and downloads, ensuring reliability and performance while handling large datasets.
 
 
-**Topics:** `php`, `mysql`, `blog`, `ajax`, `bootstrap`, `jquery`, `css`, `currency conversion`, `external api integration`, `api integration`
+**Topics:** `php`, `http`, `networking`, `file-transfer`, `uploads`, `large-files`, `downloads`, `performance-optimization `
 
 ![Efficient File Transfer System Using HTTP for Large Datasets](./assets/images/large-file-transfer-http.png)
 
