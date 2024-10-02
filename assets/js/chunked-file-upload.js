@@ -45,8 +45,14 @@ function displayFileList(files) {
     const fileList = $('#file-list');
     fileList.empty();
     Array.from(files).forEach(file => {
-        fileList.append(`<div class="file-status" id="file-status-${file.name.replaceAll(' ', '-')}">${file.name} (${(file.size / 1024).toFixed(2)} KB) - <span id="status-${file.name.replaceAll(' ', '-')}">Pending</span></div>`);
+        const sanitizedFileName = sanitizeFileName(file.name);
+        fileList.append(`<div class="file-status" id="file-status-${sanitizedFileName}">${file.name} (${(file.size / 1024).toFixed(2)} KB) - <span id="status-${sanitizedFileName}">Pending</span></div>`);
     });
+}
+
+// Function to sanitize the file name by replacing special characters
+function sanitizeFileName(fileName) {
+    return fileName.replace(/[^a-zA-Z0-9-_]/g, '-');
 }
 
 $('#uploadBtn').on('click', function() {
@@ -82,12 +88,14 @@ $('#uploadBtn').on('click', function() {
                 success: function(response) {
                     currentChunk++;
                     $('#progress-bar').css('width', ((currentChunk / totalChunks) * 100) + '%');
-                    $('#status-' + file.name.replaceAll(' ', '-')).html('Uploaded chunk ' + (currentChunk) + ' of ' + totalChunks); // Update status
+                    const sanitizedFileName = sanitizeFileName(file.name);
+                    $('#status-' + sanitizedFileName).html('Uploaded chunk ' + (currentChunk) + ' of ' + totalChunks); // Update status
                     if (currentChunk < totalChunks) {
                         uploadChunk(); // Upload next chunk
                     } else {
                         $('#status-' + file.name.replaceAll(' ', '-')).html('Upload complete'); // Final status
                     }
+                    getFileList();
                 },
                 error: function(xhr, status, error) {
                     console.error('Error uploading chunk:', error);
@@ -101,30 +109,61 @@ $('#uploadBtn').on('click', function() {
 });
 
 // Functionality for downloading files
-$('#downloadBtn').on('click', function() {
-    $('#download-list').empty();
-    // Get list of files from the server
+$(document).ready(function() {
+    getFileList();
+});
+
+// Fetch available files from the server
+function getFileList() {
     $.ajax({
         url: './src/get_files.php',
         type: 'GET',
-        success: function(response) {
-            try {
-                const files = JSON.parse(response); // Parse the JSON string
-                files.forEach(file => {
-                    const listItem = $(`<div>${file} <button class="btn btn-link" onclick="downloadFile('${file}')">Download</button></div>`);
-                    $('#download-list').append(listItem);
+        success: function (response) {
+            const files = JSON.parse(response);
+            const fileList = $('#fileList');
+            fileList.html('');
+            // Populate the list of files
+            files.forEach(function (file) {
+                const listItem = $('<li></li>').text(file);
+                const downloadLink = $('<a></a>').attr('href', '#').text(' Download');
+
+                downloadLink.on('click', function (e) {
+                    e.preventDefault();
+                    downloadFile(file);
                 });
-            } catch (error) {
-                alert('Error parsing response: ' + error);
-            }
+
+                listItem.append(downloadLink);
+                fileList.append(listItem);
+            });
         },
-        error: function() {
-            alert('Error occurred while fetching files.');
+        error: function () {
+            alert('Error fetching file list.');
         }
     });
-});
+}
 
-
+// Functionality for downloading files
 function downloadFile(fileName) {
-    window.location.href = './src/download.php?file=' + fileName;
+    $.ajax({
+        url: './src/download.php?file=' + fileName,
+        type: 'GET',
+        xhr: function() {
+            const xhr = new XMLHttpRequest();
+            xhr.responseType = 'blob';
+            return xhr;
+        },
+        success: function(data) {
+            const url = window.URL.createObjectURL(data);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = fileName;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            window.URL.revokeObjectURL(url);
+        },
+        error: function() {
+            alert('Error downloading file.');
+        }
+    });
 }
